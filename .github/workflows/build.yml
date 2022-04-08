@@ -42,7 +42,7 @@ jobs:
         run: cd "LectureFeed/src/main/resources/LectureFeed-Web" && npm install
 
       - name: Run tests
-        run: cd "src/main/resources/LectureFeed/src/main/resources/LectureFeed-Web" && npm run test-server
+        run: cd "LectureFeed/src/main/resources/LectureFeed-Web" && npm run test-server
 
       - name: Build LectureFeed-Web
         run: cd "LectureFeed/src/main/resources/LectureFeed-Web" && npm run build
