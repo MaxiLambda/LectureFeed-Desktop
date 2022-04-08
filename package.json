@@ -1,0 +1,44 @@
+{
+  "name": "lecturefeed-desktop",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MaximilianLincks/LectureFeed-Desktop.git"
+  },
+  "build": {
+    "appId": "com.lecturefeed.desktop",
+    "mac": {
+      "icon": "./resources/icons/mac.icns",
+      "category": "public.app-category.utilities"
+    },
+    "win": {
+      "icon": "./resources/icons/win.png"
+    },
+    "files": [
+      "./resources/**/*",
+      "*.js"
+    ],
+    "directories": {
+      "buildResources": "public"
+    }
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MaximilianLincks/LectureFeed-Desktop/issues"
+  },
+  "homepage": "https://github.com/MaximilianLincks/LectureFeed-Desktop#readme",
+  "dependencies": {
+    "electron": "^18.0.3",
+    "electron-packager": "^15.4.0",
+    "minimal-request-promise": "^1.5.0",
+    "tree-kill": "^1.2.2"
+  }
+}
