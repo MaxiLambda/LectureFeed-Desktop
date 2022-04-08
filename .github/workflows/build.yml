@@ -38,14 +38,14 @@ jobs:
           ref: main
           path: LectureFeed/src/main/resources/LectureFeed-Web
 
-      #- name: Install LectureFeed-Web
-      #  run: cd "LectureFeed/src/main/resources/LectureFeed-Web" && npm install
+      - name: Install LectureFeed-Web
+        run: cd "LectureFeed/src/main/resources/LectureFeed-Web" && npm install
 
-      #- name: Run tests
-      #  run: cd "src/main/resources/LectureFeed/src/main/resources/LectureFeed-Web" && npm run test-server
+      - name: Run tests
+        run: cd "src/main/resources/LectureFeed/src/main/resources/LectureFeed-Web" && npm run test-server
 
-      #- name: Build LectureFeed-Web
-      #  run: cd "LectureFeed/src/main/resources/LectureFeed-Web" && npm run build
+      - name: Build LectureFeed-Web
+        run: cd "LectureFeed/src/main/resources/LectureFeed-Web" && npm run build
 
       - name: Delete Subproject
         run: move "LectureFeed/src/main/resources/LectureFeed-Web" .
