@@ -38,17 +38,17 @@ jobs:
           ref: main
           path: LectureFeed/src/main/resources/LectureFeed-Web
 
-      - name: Install LectureFeed-Web
-        run: cd "LectureFeed/src/main/resources/LectureFeed-Web" && npm install
+      #- name: Install LectureFeed-Web
+      #  run: cd "LectureFeed/src/main/resources/LectureFeed-Web" && npm install
 
       #- name: Run tests
       #  run: cd "src/main/resources/LectureFeed/src/main/resources/LectureFeed-Web" && npm run test-server
 
-      - name: Build LectureFeed-Web
-        run: cd "LectureFeed/src/main/resources/LectureFeed-Web" && npm run build
+      #- name: Build LectureFeed-Web
+      #  run: cd "LectureFeed/src/main/resources/LectureFeed-Web" && npm run build
 
       - name: Delete Subproject
-        run: del /s /q "LectureFeed/src/main/resources/LectureFeed-Web"
+        run: del /s "LectureFeed/src/main/resources/LectureFeed-Web"
 
       #- uses: actions/checkout@v2
       - name: Set up JDK 17
