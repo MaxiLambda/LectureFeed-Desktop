@@ -29,26 +29,26 @@ jobs:
         with:
             repository: MaximilianLincks/LectureFeed
             ref: main
-            path: resources/LectureFeed
+            path: LectureFeed
 
       - name: Checkout LectureFeed-Web
         uses: actions/checkout@v2
         with:
           repository: MaximilianLincks/LectureFeed-Web
           ref: main
-          path: resources/LectureFeed/src/main/resources/LectureFeed-Web
+          path: LectureFeed/src/main/resources/LectureFeed-Web
 
       - name: Install LectureFeed-Web
-        run: cd "resources/LectureFeed/src/main/resources/LectureFeed-Web" && npm install
+        run: cd "LectureFeed/src/main/resources/LectureFeed-Web" && npm install
 
       #- name: Run tests
       #  run: cd "src/main/resources/LectureFeed/src/main/resources/LectureFeed-Web" && npm run test-server
 
       - name: Build LectureFeed-Web
-        run: cd "resources/LectureFeed/src/main/resources/LectureFeed-Web" && npm run build
+        run: cd "LectureFeed/src/main/resources/LectureFeed-Web" && npm run build
 
       - name: Delete Subproject
-        run: sudo chown -R $USER:$USER "resources/LectureFeed/src/main/resources/LectureFeed-Web" && rm -rf "resources/LectureFeed/src/main/resources/LectureFeed-Web"
+        run: rm -rf "LectureFeed/src/main/resources/LectureFeed-Web"
 
       #- uses: actions/checkout@v2
       - name: Set up JDK 17
@@ -58,13 +58,10 @@ jobs:
           distribution: 'adopt'
           cache: maven
       - name: Build with Maven
-        run: cd resources/LectureFeed/ && mvn -B package --file pom.xml
+        run: cd LectureFeed/ && mvn -B package --file pom.xml
 
       - name: Copy Jar
-        run: cp resources/LectureFeed/target/*.jar .
-
-      - name: Delete LectureFeed
-        run: rm -rf "resources/LectureFeed"
+        run: cp LectureFeed/target/*.jar assets/server/
 
       - name: Install Desktop-App
         run: npm install
