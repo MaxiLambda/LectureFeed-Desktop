@@ -1,1 +1,73 @@
+name: Build LectureFeed-Desktop
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+      - name: Use Node.js ${{ matrix.node-version }}
+          uses: actions/setup-node@v1
+          with:
+            node-version: ${{ matrix.node-version }}
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Checkout LectureFeed
+          uses: actions/checkout@v2
+          with:
+            repository: MaximilianLincks/LectureFeed
+            ref: main
+            path: resources/LectureFeed
+
+      - name: Checkout LectureFeed-Web
+        uses: actions/checkout@v2
+        with:
+          repository: MaximilianLincks/LectureFeed-Web
+          ref: main
+          path: resources/LectureFeed/src/main/resources/LectureFeed-Web
+
+      - name: Install LectureFeed-Web
+        run: cd "resources/LectureFeed/src/main/resources/LectureFeed-Web" && npm install
+
+      #- name: Run tests
+      #  run: cd "src/main/resources/LectureFeed/src/main/resources/LectureFeed-Web" && npm run test-server
+
+      - name: Build LectureFeed-Web
+        run: cd "resources/LectureFeed/src/main/resources/LectureFeed-Web" && npm run build
+
+      - name: Delete Subproject
+        run: sudo chown -R $USER:$USER "resources/LectureFeed/src/main/resources/LectureFeed-Web" && rm -rf "resources/LectureFeed/src/main/resources/LectureFeed-Web"
+
+      #- uses: actions/checkout@v2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+          cache: maven
+      - name: Build with Maven
+        run: cd resources/LectureFeed/ && mvn -B package --file pom.xml
+
+      - name: Copy Jar
+        run: cp resources/LectureFeed/target/*.jar .
+
+      - name: Delete LectureFeed
+          run: rm -rf "resources/LectureFeed"
+
+      - name: Install Desktop-App
+          run: npm install
+
+      - name: Build Desktop-App
+          run: npm run build
 
