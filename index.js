@@ -146,7 +146,7 @@ app.on('ready', function () {
     Menu.setApplicationMenu(menu);
 
     serverProcess = require('child_process')
-        .spawn('java', ['-jar', path.join(getResourcesPath(), 'assets', 'server', 'LectureFeed-0.0.1-SNAPSHOT.jar')],
+        .spawn('java', ['-jar', path.join(getResourcesPath(), 'assets', 'server', 'lecturefeed.jar')],
             {
                 cwd: path.join(getResourcesPath(), 'assets')
             });
