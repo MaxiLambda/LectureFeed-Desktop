@@ -16,16 +16,16 @@ jobs:
 
     steps:
       - name: Use Node.js ${{ matrix.node-version }}
-          uses: actions/setup-node@v1
-          with:
+        uses: actions/setup-node@v1
+        with:
             node-version: ${{ matrix.node-version }}
 
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Checkout LectureFeed
-          uses: actions/checkout@v2
-          with:
+        uses: actions/checkout@v2
+        with:
             repository: MaximilianLincks/LectureFeed
             ref: main
             path: resources/LectureFeed
@@ -63,18 +63,18 @@ jobs:
         run: cp resources/LectureFeed/target/*.jar .
 
       - name: Delete LectureFeed
-          run: rm -rf "resources/LectureFeed"
+        run: rm -rf "resources/LectureFeed"
 
       - name: Install Desktop-App
-          run: npm install
+        run: npm install
 
       - name: Build Desktop-App
-          run: npm run build
+        run: npm run build
 
       - name: Packing
-          run: mkdir staging && cp dist/*.exe staging
-            - uses: actions/upload-artifact@v1
-              with:
-                name: Package
-                path: staging
+        run: mkdir staging && cp dist/*.exe staging
+      - uses: actions/upload-artifact@v1
+        with:
+              name: Package
+              path: staging
 
