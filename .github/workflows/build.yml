@@ -7,11 +7,12 @@ on:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}       
 
     strategy:
       matrix:
+        #os: [macos-latest, ubuntu-latest, windows-latest]
+        os: [windows-latest]
         node-version: [14.x]
 
     steps:
