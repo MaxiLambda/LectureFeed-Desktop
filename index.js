@@ -1,4 +1,4 @@
-const {app, BrowserWindow, globalShortcut, dialog} = require('electron');
+const {app, BrowserWindow, globalShortcut, dialog, pro, Menu, shell} = require('electron');
 const path = require('path')
 const kill = require("tree-kill");
 
@@ -7,6 +7,94 @@ let serverProcess = null;
 let expectedKill = false;
 
 app.allowRendererProcessReuse = true;
+
+const getResourcesPath = () => {
+    return app.isPackaged? process.resourcesPath: __dirname;
+};
+
+const isMac = process.platform === 'darwin'
+
+const template = [
+    // { role: 'appMenu' }
+    ...(isMac ? [{
+        label: app.name,
+        submenu: [
+            { role: 'about' },
+            { type: 'separator' },
+            { role: 'services' },
+            { type: 'separator' },
+            { role: 'hide' },
+            { role: 'hideOthers' },
+            { role: 'unhide' },
+            { type: 'separator' },
+            { role: 'quit' }
+        ]
+    }] : []),
+    // { role: 'fileMenu' }
+    {
+        label: 'File',
+        submenu: [
+            isMac ? { role: 'close' } : { role: 'quit' }
+        ]
+    },
+    // { role: 'viewMenu' }
+    {
+        label: 'View',
+        submenu: [
+            { role: 'reload' },
+            { role: 'forceReload' },
+            { role: 'toggleDevTools' },
+            { type: 'separator' },
+            { role: 'resetZoom' },
+            { role: 'zoomIn' },
+            { role: 'zoomOut' },
+            { type: 'separator' },
+            { role: 'togglefullscreen' }
+        ]
+    },
+    // { role: 'windowMenu' }
+    {
+        label: 'Window',
+        submenu: [
+            { role: 'minimize' },
+            { role: 'zoom' },
+            ...(isMac ? [
+                { type: 'separator' },
+                { role: 'front' },
+                { type: 'separator' },
+                { role: 'window' }
+            ] : [
+                { role: 'close' }
+            ])
+        ]
+    },
+    {
+        role: 'help',
+        submenu: [
+            {
+                label: 'Documentation',
+                click: async () => {
+                    const { shell } = require('electron')
+                    await shell.openExternal('https://github.com/MaximilianLincks/LectureFeed-Docs#lecturefeed---software-requirements-specification')
+                }
+            },
+            {
+                label: 'Search Issues',
+                click: async () => {
+                    const { shell } = require('electron')
+                    await shell.openExternal('https://github.com/MaximilianLincks/LectureFeed/issues')
+                }
+            },
+            {
+                label: 'About us',
+                click: async () => {
+                    const { shell } = require('electron')
+                    await shell.openExternal('https://lecturefeed.wordpress.com/')
+                }
+            }
+        ]
+    }
+]
 
 // Provide API for web application
 global.callElectronUiApi = function () {
@@ -53,10 +141,14 @@ app.on('window-all-closed', function () {
 app.on('ready', function () {
     platform = process.platform;
 
+
+    let menu = Menu.buildFromTemplate(template);
+    Menu.setApplicationMenu(menu);
+
     serverProcess = require('child_process')
-        .spawn('java', ['-jar', path.join(__dirname, 'resources', 'LectureFeed-0.0.1-SNAPSHOT.jar')],
+        .spawn('java', ['-jar', path.join(getResourcesPath(), 'assets', 'server', 'LectureFeed-0.0.1-SNAPSHOT.jar')],
             {
-                cwd: path.join(__dirname, 'resources')
+                cwd: path.join(getResourcesPath(), 'assets')
             });
 
     if (!serverProcess) {
@@ -91,7 +183,7 @@ app.on('ready', function () {
 
    const openWindow = function () {
         mainWindow = new BrowserWindow({
-            icon: path.join(__dirname, 'resources', 'icons', 'favicon.ico'),
+            icon: path.join(getResourcesPath(), 'assets', 'icons', 'favicon.ico'),
             title: 'LectureFeed',
             width: 500,
             height: 768,
@@ -116,6 +208,7 @@ app.on('ready', function () {
         });
     };
 
+    var currentCount = 0;
     const startUp = function () {
         const requestPromise = require('minimal-request-promise');
 
@@ -126,9 +219,11 @@ app.on('ready', function () {
             //console.log(response)
             console.log('Waiting for the server start...');
 
-            setTimeout(function () {
-                startUp();
-            }, 1000);
+            if(currentCount < 20)
+                setTimeout(function () {
+                    currentCount++;
+                    startUp();
+                }, 1000);
         });
     };
 

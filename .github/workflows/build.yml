@@ -71,3 +71,10 @@ jobs:
       - name: Build Desktop-App
           run: npm run build
 
+      - name: Packing
+          run: mkdir staging && cp dist/*.exe staging
+            - uses: actions/upload-artifact@v1
+              with:
+                name: Package
+                path: staging
+
