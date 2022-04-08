@@ -61,7 +61,7 @@ jobs:
         run: cd LectureFeed/ && mvn -B package --file pom.xml
 
       - name: Copy Jar
-        run: cp LectureFeed/target/*.jar assets/server/
+        run: cp LectureFeed/target/*.jar assets/server/lecturefeed.jar
 
       - name: Install Desktop-App
         run: npm install
