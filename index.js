@@ -32,7 +32,7 @@ const template = [
     }] : []),
     // { role: 'fileMenu' }
     {
-        label: 'File',
+        label: 'LectureFeed',
         submenu: [
             isMac ? { role: 'close' } : { role: 'quit' }
         ]
@@ -179,7 +179,7 @@ app.on('ready', function () {
 
     console.log("Server PID: " + serverProcess.pid);
 
-   const appUrl = 'http://localhost:8080/#/presenter';
+   const appUrl = 'http://localhost:8080/#/presenter?minimalheader=1&hidefooter=1';
 
    const openWindow = function () {
         mainWindow = new BrowserWindow({
@@ -192,7 +192,9 @@ app.on('ready', function () {
             webPreferences: {nodeIntegration: true}
         });
         mainWindow.loadURL(appUrl);
-
+        mainWindow.webContents.session.clearStorageData([], function (data) {
+           console.log(data);
+        })
         mainWindow.on('closed', function () {
             mainWindow = null;
         });
