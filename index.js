@@ -158,10 +158,10 @@ app.on('ready', function () {
     }
 
     serverProcess.stdout.on('data', function (data) {
-        // process.stdout.write('Server: ' + data);
+        if(app.commandLine.hasSwitch("server-logging")) process.stdout.write('Server: ' + data);
     });
     serverProcess.stderr.on('data', function (data) {
-        // process.stderr.write('Server error: ' + data);
+        if(app.commandLine.hasSwitch("server-logging")) process.stderr.write('Server error: ' + data);
     });
 
     serverProcess.on('exit', code => {
