@@ -13,6 +13,7 @@ const getResourcesPath = () => {
 };
 
 const isMac = process.platform === 'darwin'
+const DEFAULT_SERVER_PORT = 8080;
 
 const template = [
     // { role: 'appMenu' }
@@ -134,6 +135,10 @@ global.callElectronUiApi = function () {
     }
 };
 
+function getServerPort(){
+    return app.commandLine.hasSwitch("port")? app.commandLine.getSwitchValue("port"): DEFAULT_SERVER_PORT
+}
+
 app.on('window-all-closed', function () {
     app.quit();
 });
@@ -146,7 +151,10 @@ app.on('ready', function () {
     Menu.setApplicationMenu(menu);
 
     serverProcess = require('child_process')
-        .spawn('java', ['-jar', path.join(getResourcesPath(), 'assets', 'server', 'lecturefeed.jar')],
+        .spawn('java', ['-jar',
+                path.join(getResourcesPath(), 'assets', 'server', 'lecturefeed.jar'),
+                '-p', getServerPort()
+            ],
             {
                 cwd: path.join(getResourcesPath(), 'assets')
             });
@@ -179,7 +187,7 @@ app.on('ready', function () {
 
     console.log("Server PID: " + serverProcess.pid);
 
-   const appUrl = 'http://localhost:8080/#/presenter?minimalheader=1&hidefooter=1';
+   const appUrl = `http://localhost:${getServerPort()}/#/presenter?minimalheader=1&hidefooter=1`;
 
    const openWindow = function () {
         mainWindow = new BrowserWindow({
