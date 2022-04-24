@@ -135,8 +135,18 @@ global.callElectronUiApi = function () {
     }
 };
 
+function getParsedIntPort() {
+    try {
+        let port = parseInt(app.commandLine.getSwitchValue("port"));
+        if(typeof port === "number"){
+            return port;
+        }
+    }catch (e) { }
+    return DEFAULT_SERVER_PORT;
+}
+
 function getServerPort(){
-    return app.commandLine.hasSwitch("port")? app.commandLine.getSwitchValue("port"): DEFAULT_SERVER_PORT
+    return app.commandLine.hasSwitch("port")? getParsedIntPort(): DEFAULT_SERVER_PORT
 }
 
 app.on('window-all-closed', function () {
@@ -145,7 +155,6 @@ app.on('window-all-closed', function () {
 
 app.on('ready', function () {
     platform = process.platform;
-
 
     let menu = Menu.buildFromTemplate(template);
     Menu.setApplicationMenu(menu);

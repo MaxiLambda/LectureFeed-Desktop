@@ -5,7 +5,7 @@
   "main": "index.js",
   "author": "LectureFeed",
   "scripts": {
-    "start": "electron . --server-logging",
+    "start": "electron . --server-logging --port=80",
     "build": "electron-builder --win portable"
   },
   "repository": {
